@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -6,7 +6,7 @@ app.config['JSON_AS_ASCII'] = False
 
 @app.route('/',methods=['GET','POST'])
 def index():
-    return 'hello world'
+    return render_template('helloworld.html')
 
 
 if __name__ == '__main__':
