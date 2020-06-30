@@ -10,7 +10,7 @@
 
 **url：**/register
 
-**方法：**post
+**方法：** post
 
 **参数：**
 
@@ -33,7 +33,7 @@ json格式
 
 **url：**/login
 
-**方法：**post
+**方法：** post
 
 **参数：**
 
