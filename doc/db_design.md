@@ -28,7 +28,7 @@
     "members" : [
         {
             "userId" : "String",	// 成员的ObjectId
-            "permission" : "String" // 权限, r 或 w
+            "permission" : "Int" // 权限, 0只读，1可读可写
         }
      ],
     "apis" : [	// 项目的api
