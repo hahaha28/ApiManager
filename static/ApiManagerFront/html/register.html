@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>注册页面</title>
+		<script src="../jquery/dist/jquery.min.js"></script>
+		<script src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css" />
+		<script>
+			$(function(){
+				$("#register").click(function(){
+					var name = $("#name").val();
+					var account = $("#account").val();
+					var password = $("#password").val();
+					
+					$("#name").val("");
+					$("#account").val("");
+					$("#password").val("");
+					
+					$.ajax({
+						// url
+						url:"http://api.inaction.fun/register",
+						// 请求类型
+						type:"POST",
+						// 请求数据，这里使用json格式
+						// JSON.stringify()方法将对象转换为json字符串
+						data:JSON.stringify({
+							'account':account,
+							'password':password,
+							'name':name
+						}),
+						// 数据类型，这里设置为json
+						contentType:'application/json',
+						// 成功时调用的方法
+						success:function(data,status,xhr){
+							console.log("success",xhr.status,xhr.responseJSON)
+							// 给出提示，并跳转到登陆页面
+							document.getElementById("tip").innerHTML = "注册成功！即将跳转到登陆页面...";
+							document.getElementById("tip2").innerHTML = "";				
+							setTimeout("window.location.href = 'login.html'",2000)
+						},
+						// 失败时调用的方法
+						error:function(xhr,error,exception){
+							console.log("error",xhr.status,xhr.responseJSON)
+							// 给用户提示
+							if(xhr.status==409){
+								document.getElementById("tip2").innerHTML = "账号已存在！";
+							}
+							
+						}
+					})
+				})
+			});
+		</script>
+	</head>
+	<body>
+		<center>
+			<div class="jumbotron">
+				<h1 class="display-4">ApiManager</h1>
+				<p class="lead">软件项目接口管理系统 注册</p>
+				<hr class="my-4">
+				
+				<form>
+					<div id="tip" class="alert-success" role="alert" style="margin: 15px;width: 250px;"></div>
+					<div id="tip2" class="alert-warning" role="alert" style="margin: 15px;width: 250px;"></div>
+					<p>昵 称：<input id="name" name="name" type="text" placeholder="请输入昵称" /> </p>
+					<p>账 号：<input id="account" name="account" type="text" placeholder="请输入账号"/></p>
+					<p>密 码：<input id="password" name="password" type="password" placeholder="请输入密码"/></p>
+					<input id="register" name="" type="button" class="btn btn-primary" value="注册"/>
+					<p style="padding: 10px;">
+						<small style="color: #808080;font-style: italic;font-weight: 100;">已有账号？
+							<a href="login.html" style="text-decoration: underline;">登陆</a>
+						</small>
+					</p>			
+				</form> 
+			</div>
+		</center>
+	</body>
+</html>
