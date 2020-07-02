@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, session
+from flask import Flask, render_template, request, jsonify, session, redirect
 from dbutil import DBUtil
 
 app = Flask(__name__)
@@ -9,7 +9,7 @@ db = DBUtil()
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('helloworld.html')
+    return redirect('/static/ApiManagerFront/html/login.html')
 
 
 @app.route('/register', methods=['POST'])
