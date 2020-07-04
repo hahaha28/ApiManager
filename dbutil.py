@@ -38,6 +38,15 @@ class DBUtil:
         """
         return self.user_table.find_one({'account': account})
 
+    def find_user_by_id(self, user_id: str) -> dict:
+        """
+        根据id查找用户信息
+
+        :param user_id: 用户id
+        :return: 字典形式数据，不存在则返回None
+        """
+        return self.user_table.find_one({"_id": ObjectId(user_id)})
+
     def create_project(self, creator: str, name: str, members: list) -> ObjectId:
         """
         创建项目，其中members是一个列表，每个元素都必须有userId和permission
@@ -90,6 +99,61 @@ class DBUtil:
             }
         )
 
+    def update_member_permission(self, project_id: str, member_id: str, permission: int):
+        """
+        修改项目成员权限
+
+        :param project_id: 项目id
+        :param member_id:  成员id
+        :param permission: 新权限
+        :return:
+        """
+        self.project_table.update_one(
+            {
+                "$and": [
+                    {
+                        "_id": ObjectId(project_id)
+                    },
+                    {
+                        "members.userId": member_id
+                    }
+                ]
+            },
+            {
+                "$set": {
+                    "members.$.permission": permission
+                }
+            }
+        )
+
+    def find_user_created_project(self, user_id: str) -> list:
+        """
+        查找用户创建的项目
+
+        :param user_id: 用户id
+        :return:
+        """
+        data = self.project_table.find({"creator": user_id})
+        result = []
+        for i in data:
+            result.append(i)
+        return result
+
+    def find_user_joined_project(self,user_id: str) -> list:
+        """
+        查找用户参加的项目（不包括创建的）
+
+        :param user_id: 用户id
+        :return:
+        """
+        data = self.project_table.find({"members.userId": user_id})
+        result = []
+        for i in data:
+            result.append(i)
+        return result
+
 
 c = DBUtil()
+data = c.find_user_joined_project("5eff533875af6dffdd8650ae")
+print(data)
 

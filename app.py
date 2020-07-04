@@ -130,5 +130,110 @@ def new_project_member():
     return jsonify({"msg": "ok"}), 200
 
 
+@app.route('/update/member/permission', methods=['POST'])
+def update_member_permission():
+    """
+    修改项目成员权限
+
+    :return:
+    """
+    project_id = request.json['projectId']
+    account = request.json['account']
+    # 检查项目id合法性
+    project_data = db.find_project(project_id)
+    if project_data is None:
+        return jsonify({"msg": "client error"}), 405
+    # 检查发起修改者是否是项目组长
+    if session['user_id'] != project_data['creator']:
+        return jsonify({"msg": "client error"}), 405
+    # 检查用户账号合法性
+    user_data = db.find_user(account)
+    if user_data is None:
+        return jsonify({"msg": "client error"}), 405
+    user_id = str(user_data['_id'])
+    # 检查该用户是否属于该项目
+    is_member = False
+    for member in project_data['members']:
+        if user_id == member['userId']:
+            is_member = True
+    if is_member == False:
+        return jsonify({"msg": "client error"}), 405
+    # 数据都合法，开始进行修改
+    db.update_member_permission(
+        project_id,
+        user_id,
+        request.json['permission']
+    )
+    return jsonify({"msg": "ok"}), 200
+
+
+@app.route('/delete/member', methods=['POST'])
+def delete_member():
+    """
+    删除项目成员
+
+    :return:
+    """
+    pass
+
+
+@app.route('/user/data', methods=['GET'])
+def get_user_data():
+    """
+    获取用户信息
+
+    :return:
+    """
+    user_id = session['user_id']
+    # 查询用户表
+    user_data = db.find_user_by_id(user_id)
+    # 查询用户创建的项目
+    created_project = db.find_user_created_project(user_id)
+    # 查询用户参加的项目
+    joined_project = db.find_user_joined_project(user_id)
+    # 构建返回数据
+    project_data = []
+    for i in created_project:
+        members = []
+        for member_data in i['members']:
+            member_user_data = db.find_user_by_id(member_data['userId'])
+            members.append({
+                "account": member_user_data['account'],
+                "name": member_user_data['name'],
+                "permission": member_data['permission']
+            })
+        project_data.append({
+            "id": str(i['_id']),
+            "name": i['name'],
+            "leaderAccount": user_data['account'],
+            "leaderName": user_data['name'],
+            "members": members
+        })
+    for i in joined_project:
+        leader_data = db.find_user_by_id(i['creator'])
+        members = []
+        for member_data in i['members']:
+            member_user_data = db.find_user_by_id(member_data['userId'])
+            members.append({
+                "account": member_user_data['account'],
+                "name": member_user_data['name'],
+                "permission": member_data['permission']
+            })
+        project_data.append({
+            "id": str(i['_id']),
+            "name": i['name'],
+            "leaderAccount": leader_data['account'],
+            "leaderName": leader_data['name'],
+            "members": members
+        })
+
+    result = {
+        "name": user_data['name'],
+        "account": user_data['account'],
+        "project": project_data
+    }
+    return jsonify(result),200
+
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=9999)
