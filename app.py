@@ -7,6 +7,29 @@ app.secret_key = 'askdfwef1k2j31ga'
 db = DBUtil()
 
 
+@app.before_request
+def before_request():
+    # 检测登录状态，如果没登录则跳转到登录页面
+    should_login = True
+    path = request.path
+    print(path)
+    if 'bootstrap-4.5.0-dist' in path:
+        # 访问bootstrap资源不需要登录
+        should_login = False
+    elif 'jquery-3.5.1.min.js' in path:
+        # 访问jquery资源不需要登录
+        should_login = False
+    elif path == '/' or path == '/register':
+        # 访问登录和注册页面不需要登录
+        should_login = False
+    elif path == '/static/ApiManagerFront/html/login.html' or \
+            path == '/static/ApiManagerFront/html/register.html':
+        # 访问登录和注册的静态页面不需要登录
+        should_login = False
+    if should_login == True:
+        return redirect('/')
+
+
 @app.route('/', methods=['GET', 'POST'])
 def index():
     return redirect('/static/ApiManagerFront/html/login.html')
@@ -232,7 +255,7 @@ def get_user_data():
         "account": user_data['account'],
         "project": project_data
     }
-    return jsonify(result),200
+    return jsonify(result), 200
 
 
 if __name__ == '__main__':

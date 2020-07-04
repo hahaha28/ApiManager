@@ -154,6 +154,5 @@ class DBUtil:
 
 
 c = DBUtil()
-data = c.find_user_joined_project("5eff533875af6dffdd8650ae")
-print(data)
+
 
