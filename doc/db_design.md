@@ -77,7 +77,7 @@
     ],
     "requestParamType" : "Int", // 请求参数类型
     "requestParamJsonType" : "Int", // 请求参数的JSON类型（Object还是Array）
-    "requestParam" : [
+    "requestParam" : [  // 接口的请求参数
        {
            "paramKey" : "String", //参数名
            "type" : "String", // 类型
@@ -86,14 +86,33 @@
                requestParam
            ]
        } 
-    ],	// 接口的请求参数
-    "responseHeader" : [
-        {
-            "headerName" : "String", // 返回头名
-            "headerValue" : "String", // 值
-            "explain" : "String"	// 说明
-        }
-    ],
-    "responseParam" : ReturnData		// 接口的返回数据
+    ],	
+    "requestRaw" : "String", // 请求参数，raw类型
+    "requestExplain" : "String", // 请求数据的额外说明信息
+    "responseData" : [  // 返回数据，用数组是因为可能有多种情况
+     	{
+            "responseHeader" : [
+                {
+                    "headerName" : "String", // 返回头名
+                    "headerValue" : "String", // 值
+                    "explain" : "String"	// 说明
+                }
+            ],
+            "responseParamType" : "Int", // 返回参数类型
+            "requestParamJsonType" : "Int", // 请求参数的JSON类型
+            "responseParam" : [
+                {
+                   "paramKey" : "String", //参数名
+                   "type" : "String", // 类型
+                   "explain" : "String",	// 说明
+                   "childList" : [
+                       responseParam
+                   ]
+               }
+            ],
+            "responseRaw" : "String",
+            "responseExplain" : "String" // 返回数据的额外说明信息
+        }   
+    ]
 }
 ```
