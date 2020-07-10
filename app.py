@@ -12,21 +12,24 @@ def before_request():
     # 检测登录状态，如果没登录则跳转到登录页面
     should_login = True
     path = request.path
-    print(path)
-    if 'bootstrap-4.5.0-dist' in path:
+    if 'is_login' in session and session['is_login'] is True:
+        # 已登录不需要再登陆
+        should_login = False
+    elif 'bootstrap-4.5.0-dist' in path:
         # 访问bootstrap资源不需要登录
         should_login = False
     elif 'jquery-3.5.1.min.js' in path:
         # 访问jquery资源不需要登录
         should_login = False
-    elif path == '/' or path == '/register':
+    elif path == '/' or path == '/register' or path == '/login':
         # 访问登录和注册页面不需要登录
         should_login = False
     elif path == '/static/ApiManagerFront/html/login.html' or \
             path == '/static/ApiManagerFront/html/register.html':
         # 访问登录和注册的静态页面不需要登录
         should_login = False
-    if should_login == True:
+    if should_login is True:
+        print(f'访问{path}，重定向')
         return redirect('/')
 
 
@@ -83,6 +86,17 @@ def login():
     return jsonify({
         'msg': 'ok'
     }), 200
+
+
+@app.route('/logout', methods=['GET'])
+def log_out():
+    """
+    登出
+    :return:
+    """
+    session['is_login'] = False
+    del session['user_id']
+    return jsonify({'msg': 'ok'}), 200
 
 
 @app.route('/new/project', methods=['POST'])
