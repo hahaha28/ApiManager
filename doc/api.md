@@ -168,18 +168,17 @@ json格式
 
 **请求参数：**
 
+> 每个字段都必须有，如果数据为空填入null
+
 ```json
 {
+    "projectId" : "String", // 项目id
     "name" : "String",	// 接口名称
     "protocol" : "Int", // 协议
     "url" : "String",	// 接口的url地址
     "group" : "String",	 // 接口的组名
     "status" : "Int",  // 接口的状态
     "explain" : "String",	  // 接口的说明信息
-    "createTime" : "Long", // 接口的创建时间
-    "createUser" : "UserId", // 接口的创建者
-    "updateTime" : "Long",	 // 接口的最后更新时间
-    "updateUser" : "UserId",	// 接口的最后更新人
     "requestMethod" : "Int",	// 请求方法
     "urlParam" : [
         {
@@ -218,7 +217,7 @@ json格式
                 }
             ],
             "responseParamType" : "Int", // 返回参数类型
-            "requestParamJsonType" : "Int", // 请求参数的JSON类型
+            "responseParamJsonType" : "Int", // 请求参数的JSON类型
             "responseParam" : [
                 {
                    "paramKey" : "String", //参数名
@@ -279,11 +278,27 @@ json格式
   | 1    | Object |
   | 2    | Array  |
 
-* **返回参数：**
+**返回参数：**
 
-  | 状态码 | 数据                                 | 说明     |
-  | ------ | ------------------------------------ | -------- |
-  | 200    | {"msg": "ok" , "apiId" : "api的id" } | 创建成功 |
-  | 406    | {"msg" : "错误原因"}                 | 创建失败 |
+| 状态码 | 数据                                 | 说明     |
+| ------ | ------------------------------------ | -------- |
+| 200    | {"msg": "ok" , "apiId" : "api的id" } | 创建成功 |
+| 403    | {"msg": "no permission"}             | 无权限   |
+| 406    | {"msg" : "错误原因"}                 | 创建失败 |
 
-  
+## 删除接口
+
+**url：** /delete/api?id=xxxxxi
+
+**方法：** get
+
+**url参数：** api的id
+
+**返回参数：**
+
+| 状态码 | 数据                       | 说明          |
+| ------ | -------------------------- | ------------- |
+| 200    | {"msg":"ok"}               | 删除成功      |
+| 404    | {"msg":"api id not found"} | api的id不存在 |
+| 403    | {"msg":"no permission"}    | 无权限        |
+

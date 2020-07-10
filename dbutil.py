@@ -10,6 +10,7 @@ class DBUtil:
         self.db = self.client.api_manager
         self.user_table = self.db.user
         self.project_table = self.db.project
+        self.api_table = self.db.api
 
     def insert_user(self, account: str, password: str, name: str) -> bool:
         """
@@ -139,7 +140,7 @@ class DBUtil:
             result.append(i)
         return result
 
-    def find_user_joined_project(self,user_id: str) -> list:
+    def find_user_joined_project(self, user_id: str) -> list:
         """
         查找用户参加的项目（不包括创建的）
 
@@ -152,7 +153,135 @@ class DBUtil:
             result.append(i)
         return result
 
+    def add_project_api(self, project_id: str, group_name: str, api_id: str, api_name: str):
+        """
+        向项目中添加api
+
+        :param project_id: 项目id
+        :param group_name: api分组名
+        :param api_id: api的id
+        :param api_name api的名称
+        :return:
+        """
+        # 先查看该分组是否存在
+        project_data = self.project_table.find_one(
+            {
+                "$and": [
+                    {
+                        '_id': ObjectId(project_id)
+                    },
+                    {
+                        'apis.groupName': group_name
+                    }
+                ]
+            }
+        )
+        if project_data is None:
+            self.project_table.update_one(
+                {
+                    "_id": ObjectId(project_id)
+                },
+                {
+                    "$addToSet": {
+                        'apis': {
+                            'groupName': group_name,
+                            'apiIds': [
+                                {
+                                    'apiId': api_id,
+                                    'name': api_name
+                                }
+                            ]
+                        }
+                    }
+                }
+            )
+        else:
+            # 先查找位置
+            index = 0
+            for group in project_data['apis']:
+                if group['groupName'] == group_name:
+                    break
+                index = index + 1
+            # 然后添加
+            self.project_table.update_one(
+                {
+                    "_id": ObjectId(project_id),
+                    "apis.groupName": group_name
+                }, {
+                    "$addToSet": {
+                        f'apis.{index}.apiIds': {
+                            'apiId': api_id,
+                            'name': api_name
+                        }
+                    }
+                }
+
+            )
+
+    def delete_project_api(self, project_id: str, api_id: str):
+        """
+        删除project表中的api
+
+        :param project_id: 项目id
+        :param api_id: api id
+        :return:
+        """
+        project_data = self.project_table.find_one({'_id': ObjectId(project_id)})
+        index = -1
+        exist = False
+        for api in project_data['apis']:
+            index = index + 1
+            for api_data in api['apiIds']:
+                if api_data['apiId'] == api_id:
+                    exist = True
+                    break
+            if exist is True:
+                break
+        if exist is True:
+            self.project_table.update_one(
+                {
+                    "_id": ObjectId(project_id)
+                }, {
+                    "$pull": {
+                        f'apis.{index}.apiIds': {
+                            'apiId': api_id
+                        }
+                    }
+                }
+            )
+
+    def create_api(self, create_user_id: str, api_data: dict) -> ObjectId:
+        """
+        新建接口
+
+        :param create_user_id 创建者的id，字符串形式
+        :param api_data: 这个数据有严格的格式，请参照api.md文档中创建接口的请求参数
+        :return: 返回ObjectId
+        """
+        api_data['createUser'] = create_user_id
+        api_data['createTime'] = time.time()
+        api_data['updateTime'] = None
+        api_data['updateUser'] = None
+        return self.api_table.insert_one(api_data).inserted_id
+
+    def find_api(self, api_id: str) -> dict:
+        """
+        根据id查找api
+
+        :param api_id: id
+        :return: 字典形式的数据，如果不存在返回None
+        """
+        return self.api_table.find_one({"_id": ObjectId(api_id)})
+
+    def delete_api(self, api_id: str):
+        """
+        在api表中删除api
+
+        :param api_id: api id
+        :return:
+        """
+        self.api_table.delete_one({'_id': ObjectId(api_id)})
+
 
 db = DBUtil()
-
 

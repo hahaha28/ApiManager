@@ -2,10 +2,12 @@ from flask import Flask, render_template, request, jsonify, session, redirect
 from dbutil import db
 from views.user import user_bp
 from views.project import project_bp
+from views.api import api_bp
 
 app = Flask(__name__)
 app.register_blueprint(user_bp)
 app.register_blueprint(project_bp)
+app.register_blueprint(api_bp)
 
 app.config['JSON_AS_ASCII'] = False
 app.secret_key = 'askdfwef1k2j31ga'

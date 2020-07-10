@@ -36,7 +36,8 @@
             "groupName" : "String", // 分组名称
             "apiIds" : [
                 {
-                    apiId
+                    "apiId": "String", // api的id
+                    "name": "String" //接口名称
                 }
             ]
         }
@@ -51,6 +52,7 @@
 ```json
 {
     "ObjectId" : "...",
+    "projectId": "String", // 所属的项目id
     "name" : "String",	// 接口名称
     "protocol" : "Int", // 协议，0为http，1为https
     "url" : "String",	// 接口的url地址
