@@ -42,6 +42,33 @@ def new_project():
     })
 
 
+@project_bp.route('/find/project/apis', methods=['GET'])
+def find_project_apis():
+    """
+    获取项目的api信息
+
+    :return:
+    """
+    project_id = request.args['id']
+    project_data = db.find_project(project_id)
+    if project_data is None:
+        return jsonify({'msg':'id not found'}),404
+    # 验证该用户是否是该项目成员
+    is_member = False
+    user_id = session['user_id']
+    if project_data['creator'] == user_id:
+        is_member = True
+    else:
+        for member in project_data['members']:
+            if member['userId'] == user_id:
+                is_member = True
+                break
+    if is_member is True:
+        return jsonify(project_data['apis']), 200
+    else:
+        return jsonify({'msg': 'no permission'}), 407
+
+
 @project_bp.route('/new/project_member', methods=['POST'])
 def new_project_member():
     """

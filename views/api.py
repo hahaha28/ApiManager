@@ -74,6 +74,40 @@ def delete_api():
     return jsonify({'msg': 'ok'}), 200
 
 
+@api_bp.route('/find/api', methods=['GET'])
+def find_api():
+    """
+    根据id查询api
+
+    :return:
+    """
+    api_id = request.args['id']
+    # 查找该api信息
+    api_data = db.find_api(api_id)
+    if api_data is None:
+        return jsonify({"msg": "api id not found"}), 404
+    # 查找该api所属的项目信息
+    project_id = api_data['projectId']
+    project_data = db.find_project(project_id)
+    if project_data is None:
+        return jsonify({"msg": "project not found"}), 404
+    # 验证该用户是否是该项目成员
+    is_member = False
+    user_id = session['user_id']
+    if project_data['creator'] == user_id:
+        is_member = True
+    else:
+        for member in project_data['members']:
+            if member['userId'] == user_id:
+                is_member = True
+                break
+    if is_member is True:
+        del api_data['_id']
+        return jsonify(api_data), 200
+    else:
+        return jsonify({'msg': 'no permission'}), 407
+
+
 def check_new_api_param(dict_data: dict) -> tuple:
     """
     检测新建接口的请求参数是否合法

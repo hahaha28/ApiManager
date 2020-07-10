@@ -260,8 +260,8 @@ class DBUtil:
         """
         api_data['createUser'] = create_user_id
         api_data['createTime'] = time.time()
-        api_data['updateTime'] = None
-        api_data['updateUser'] = None
+        api_data['updateTime'] = api_data['createTime']
+        api_data['updateUser'] = create_user_id
         return self.api_table.insert_one(api_data).inserted_id
 
     def find_api(self, api_id: str) -> dict:

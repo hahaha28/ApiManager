@@ -54,7 +54,7 @@
     "ObjectId" : "...",
     "projectId": "String", // 所属的项目id
     "name" : "String",	// 接口名称
-    "protocol" : "Int", // 协议，0为http，1为https
+    "protocol" : "Int", // 协议，1http，2为https
     "url" : "String",	// 接口的url地址
     "group" : "String",	 // 接口的组名
     "status" : "Int",  // 接口的状态
@@ -118,3 +118,46 @@
     ]
 }
 ```
+
+* **procotol（协议）**
+
+  | 值   | 说明  |
+  | ---- | ----- |
+  | 1    | http  |
+  | 2    | https |
+
+* **status（接口的状态）**
+
+  | 值   | 说明   |
+  | ---- | ------ |
+  | 1    | 已发布 |
+  | 2    | 开发中 |
+  | 3    | 废弃   |
+
+* **requestMethod（请求方法）**
+
+  | 值   | 说明    |
+  | ---- | ------- |
+  | 1    | get     |
+  | 2    | post    |
+  | 3    | put     |
+  | 4    | delete  |
+  | 5    | head    |
+  | 6    | options |
+  | 7    | patch   |
+
+* **requestParamType/responseParamType（请求/返回 参数类型）**
+
+  | 值   | 说明      |
+  | ---- | --------- |
+  | 1    | Form-data |
+  | 2    | json      |
+  | 3    | raw       |
+  | 4    | 其他      |
+
+* **requestParamJsonType/responseParamType（请求/返回 的json数据的根类型）**
+
+  | 值   | 说明   |
+  | ---- | ------ |
+  | 1    | Object |
+  | 2    | Array  |
