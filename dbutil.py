@@ -153,6 +153,6 @@ class DBUtil:
         return result
 
 
-c = DBUtil()
+db = DBUtil()
 
 
