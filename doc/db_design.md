@@ -63,6 +63,7 @@
     "createUser" : "UserId", // 接口的创建者
     "updateTime" : "Long",	 // 接口的最后更新时间
     "updateUser" : "UserId",	// 接口的最后更新人
+    "updateInfo" : "String",  // 更新说明
     "requestMethod" : "Int",	// 请求方法
     "urlParam" : [
         {
@@ -161,3 +162,23 @@
   | ---- | ------ |
   | 1    | Object |
   | 2    | Array  |
+
+## 接口历史表
+
+**表名：** api_history
+
+```json
+{
+    "_id": "ObjectId",
+    "apiId": "string",  // 对应的api的id
+    "history": [
+        {
+            "updateTime": "Long", // 更新时间
+            "updateUserName": "String", // 更新人的名称
+            "updateInfo": "String", // 更新说明
+            "api": "ApiObject" // api数据，格式完全对应接口表
+        }
+    ]
+}
+```
+

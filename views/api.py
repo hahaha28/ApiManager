@@ -22,18 +22,7 @@ def new_api():
         return jsonify({'msg': '项目id不存在'}, 406)
     # 检查用户是否是项目成员并拥有权限
     user_id = session['user_id']
-    is_member = False
-    permission = -1
-    if project_data['creator'] == user_id:
-        is_member = True
-        permission = 1
-    else:
-        for member in project_data['members']:
-            if member['userId'] == user_id:
-                is_member = True
-                permission = member['permission']
-                break
-    if is_member is False or permission != 1:
+    if check_member_rw_permission(user_id, request.json['projectId']) is False:
         return jsonify({'msg': 'no permission'}), 403
     # 参数合法则新建API
     api_id = db.create_api(user_id, request.json)
@@ -55,18 +44,7 @@ def delete_api():
     project_data = db.find_project(api_data['projectId'])
     # 检测该用户是否是项目成员并有修改权限
     user_id = session['user_id']
-    is_member = False
-    permission = -1
-    if project_data['creator'] == user_id:
-        is_member = True
-        permission = 1
-    else:
-        for member in project_data['members']:
-            if member['userId'] == user_id:
-                is_member = True
-                permission = member['permission']
-                break
-    if is_member is False or permission != 1:
+    if check_member_rw_permission(user_id, api_data['project_id']) is False:
         return jsonify({'msg': 'no permission'}), 403
     # 删除api
     db.delete_api(api_id)
@@ -92,8 +70,77 @@ def find_api():
     if project_data is None:
         return jsonify({"msg": "project not found"}), 404
     # 验证该用户是否是该项目成员
-    is_member = False
+    is_member = check_member(session['user_id'], project_id)
+    if is_member is True:
+        del api_data['_id']
+        return jsonify(api_data), 200
+    else:
+        return jsonify({'msg': 'no permission'}), 407
+
+
+@api_bp.route('/update/api', methods=['POST'])
+def update_api():
+    """
+    更新接口信息
+
+    :return:
+    """
+    api_id = request.args['id']
+    update_info = request.args['info']
     user_id = session['user_id']
+    # 首先获取旧的api表的该api数据
+    api_old_data = db.find_api(api_id)
+    # 检测该用户是否是项目成员且有修改权限
+    if check_member_rw_permission(user_id, api_old_data['projectId']) is False:
+        return jsonify({'msg': 'no permission'}), 403
+    # 将这条旧的数据保存到历史表中
+    db.add_api_history(api_old_data)
+    # 将新数据更改到api表中
+    db.update_api(user_id, api_id, request.json, update_info)
+
+    return jsonify({'msg': 'ok'}), 200
+
+
+@api_bp.route('/find/api/history', methods=['GET'])
+def find_api_history():
+    """
+    查找api的历史信息
+
+    :return:
+    """
+    api_id = request.args['id']
+    type = request.args['type']
+    user_id = session['user_id']
+    # 查找api的历史数据
+    api_history_data = db.find_api_history(api_id)
+    del api_history_data['_id']
+    # 检测用户权限
+    project_id = api_history_data['history'][0]['api']['projectId']
+    if check_member(user_id,project_id) is False:
+        return jsonify({'msg': 'no permission'}), 403
+    # 根据type类型返回对应数据
+    array_len = len(api_history_data['history'])
+    if type == '1':
+        # 处理ObjectId，因为这不是json类型
+        for i in range(0,array_len):
+            api_history_data['history'][i]['api']['_id'] = str(api_history_data['history'][i]['api']['_id'])
+        return jsonify(api_history_data), 200
+    elif type == '0':
+        for i in range(0,array_len):
+            del api_history_data['history'][i]['api']
+        return jsonify(api_history_data), 200
+
+
+def check_member(user_id: str, project_id: str) -> bool:
+    """
+    检查用户是否是项目成员
+
+    :param user_id: 用户的id
+    :param project_id: 项目的id
+    :return: 如果是则返回True
+    """
+    is_member = False
+    project_data = db.find_project(project_id)
     if project_data['creator'] == user_id:
         is_member = True
     else:
@@ -101,11 +148,28 @@ def find_api():
             if member['userId'] == user_id:
                 is_member = True
                 break
-    if is_member is True:
-        del api_data['_id']
-        return jsonify(api_data), 200
+    return is_member
+
+
+def check_member_rw_permission(user_id: str, project_id: str) -> bool:
+    """
+    检测用户是否是项目成员且有读写权限
+
+    :param user_id: 用户的id
+    :param project_id: 项目的id
+    :return: 拥有权限则返回True
+    """
+    project_data = db.find_project(project_id)
+    if project_data['creator'] == user_id:
+        return True
     else:
-        return jsonify({'msg': 'no permission'}), 407
+        for member in project_data['members']:
+            if member['userId'] == user_id:
+                if member['permission'] == 1:
+                    return True
+                else:
+                    return False
+    return False
 
 
 def check_new_api_param(dict_data: dict) -> tuple:

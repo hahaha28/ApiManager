@@ -11,6 +11,7 @@ class DBUtil:
         self.user_table = self.db.user
         self.project_table = self.db.project
         self.api_table = self.db.api
+        self.api_history_table = self.db.api_history
 
     def insert_user(self, account: str, password: str, name: str) -> bool:
         """
@@ -262,7 +263,31 @@ class DBUtil:
         api_data['createTime'] = time.time()
         api_data['updateTime'] = api_data['createTime']
         api_data['updateUser'] = create_user_id
+        api_data['updateInfo'] = None
         return self.api_table.insert_one(api_data).inserted_id
+
+    def update_api(self, user_id: str, api_id: str, api_data: dict, update_info: str):
+        """
+        更新api表的接口信息
+        注意：这个方法只管更新，不管别的
+
+        :param user_id: 更新者的id
+        :param api_id: api的id
+        :param api_data: api的数据，请严格按照api.md中更新接口的请求参数格式
+        :param update_info: 更新说明
+        :return:
+        """
+        api_data['updateTime'] = time.time()
+        api_data['updateUser'] = user_id
+        api_data['updateInfo'] = update_info
+        self.api_table.update_one(
+            {
+                "_id": ObjectId(api_id)
+            },
+            {
+                "$set": api_data
+            }
+        )
 
     def find_api(self, api_id: str) -> dict:
         """
@@ -282,6 +307,57 @@ class DBUtil:
         """
         self.api_table.delete_one({'_id': ObjectId(api_id)})
 
+    def add_api_history(self, api_data: dict):
+        """
+        向api历史表添加数据
+        如果不存在会自动创建
+
+        :param api_data: api数据，格式严格按照db_design.md中接口表的格式
+        :return:
+        """
+        # 查找该api更新者的数据
+        update_user_data = self.find_user_by_id(api_data['updateUser'])
+        # 查找是否存在该表
+        data = self.api_history_table.find_one({"apiId": str(api_data['_id'])})
+        if data is None:
+            # 如果不存在，则要新建
+            self.api_history_table.insert_one({
+                "apiId": str(api_data['_id']),
+                "history": [
+                    {
+                        "updateTime": api_data['updateTime'],
+                        "updateUserName": update_user_data['name'],
+                        "updateInfo": api_data['updateInfo'],
+                        "api": api_data
+                    }
+                ]
+            })
+        else:
+            # 如果存在，则添加
+            self.api_history_table.update_one(
+                {
+                    "_id": data['_id']
+                },
+                {
+                    "$addToSet": {
+                        "history": {
+                            "updateTime": api_data['updateTime'],
+                            "updateUserName": update_user_data['name'],
+                            "updateInfo": api_data['updateInfo'],
+                            "api": api_data
+                        }
+                    }
+                }
+            )
+
+    def find_api_history(self, api_id: str) -> dict:
+        """
+        在api历史表中查找
+
+        :param api_id: api的id
+        :return: 格式请参照db_design.md中api历史表的格式
+        """
+        return self.api_history_table.find_one({'apiId': api_id})
+
 
 db = DBUtil()
-
