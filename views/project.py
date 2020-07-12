@@ -1,9 +1,8 @@
-
 from flask import Blueprint, request, jsonify, session
 
 from dbutil import db
 
-project_bp = Blueprint('project_bp',__name__)
+project_bp = Blueprint('project_bp', __name__)
 
 
 @project_bp.route('/new/project', methods=['POST'])
@@ -52,7 +51,7 @@ def find_project_apis():
     project_id = request.args['id']
     project_data = db.find_project(project_id)
     if project_data is None:
-        return jsonify({'msg':'id not found'}),404
+        return jsonify({'msg': 'id not found'}), 404
     # 验证该用户是否是该项目成员
     is_member = False
     user_id = session['user_id']
@@ -69,7 +68,7 @@ def find_project_apis():
         return jsonify({'msg': 'no permission'}), 407
 
 
-@project_bp.route('/new/project_member', methods=['POST'])
+@project_bp.route('/new/project/member', methods=['POST'])
 def new_project_member():
     """
     添加项目成员
@@ -138,11 +137,27 @@ def update_member_permission():
     return jsonify({"msg": "ok"}), 200
 
 
-@project_bp.route('/delete/member', methods=['POST'])
+@project_bp.route('/delete/project/member', methods=['POST'])
 def delete_member():
     """
     删除项目成员
 
     :return:
     """
-    pass
+    user_id = session['user_id']
+    project_id = request.json['projectId']
+    member_account = request.json['account']
+    # 检查项目是否存在
+    project_data = db.find_project(project_id)
+    if project_data is None:
+        return jsonify({'msg': '用户账号或项目不存在，或用户不是项目成员'}), 404
+    # 检查发起者是否是项目组长
+    if user_id != project_data['creator']:
+        return jsonify({'msg': 'no permission'}), 403
+    # 删除成员
+    member_data = db.find_user(member_account)
+    if member_data is None:
+        return jsonify({'msg': '用户账号或项目不存在，或用户不是项目成员'}), 404
+    member_id = str(member_data['_id'])
+    db.delete_project_member(project_id, member_id)
+    return jsonify({'msg': 'ok'}), 200

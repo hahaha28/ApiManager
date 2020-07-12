@@ -31,6 +31,27 @@ class DBUtil:
         })
         return True
 
+    def update_user(self, user_id: str, name: str, password: str):
+        """
+        更新用户信息
+
+        :param user_id: 用户id
+        :param name: 新名称
+        :param password: 新密码
+        :return:
+        """
+        self.user_table.update_one(
+            {
+                "_id": ObjectId(user_id)
+            },
+            {
+                "$set": {
+                    "name": name,
+                    "password": password
+                }
+            }
+        )
+
     def find_user(self, account: str) -> dict:
         """
         根据账号查找用户
@@ -218,6 +239,27 @@ class DBUtil:
                 }
 
             )
+
+    def delete_project_member(self, project_id: str, member_id: str):
+        """
+        删除项目成员
+
+        :param project_id: 项目id
+        :param member_id: 成员的id
+        :return:
+        """
+        self.project_table.update_one(
+            {
+                "_id": ObjectId(project_id),
+            },
+            {
+                "$pull": {
+                    "members": {
+                        "userId": member_id
+                    }
+                }
+            }
+        )
 
     def delete_project_api(self, project_id: str, api_id: str):
         """

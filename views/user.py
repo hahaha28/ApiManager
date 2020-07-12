@@ -28,6 +28,20 @@ def register():
         }), 409
 
 
+@user_bp.route('/update/user/data', methods=['POST'])
+def update_user_data():
+    """
+    更新用户信息
+
+    :return:
+    """
+    user_id = session['user_id']
+    name = request.json['name']
+    password = request.json['password']
+    db.update_user(user_id,name,password)
+    return jsonify({'msg': 'ok'}), 200
+
+
 @user_bp.route('/login', methods=['POST'])
 def login():
     """
@@ -119,6 +133,7 @@ def get_user_data():
     result = {
         "name": user_data['name'],
         "account": user_data['account'],
+        "password": user_data['password'],
         "project": project_data
     }
     return jsonify(result), 200
