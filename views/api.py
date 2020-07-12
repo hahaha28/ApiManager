@@ -44,11 +44,12 @@ def delete_api():
     project_data = db.find_project(api_data['projectId'])
     # 检测该用户是否是项目成员并有修改权限
     user_id = session['user_id']
-    if check_member_rw_permission(user_id, api_data['project_id']) is False:
+    if check_member_rw_permission(user_id, api_data['projectId']) is False:
         return jsonify({'msg': 'no permission'}), 403
     # 删除api
     db.delete_api(api_id)
     db.delete_project_api(str(project_data['_id']), api_id)
+    db.delete_api_history(api_id)
     return jsonify({'msg': 'ok'}), 200
 
 

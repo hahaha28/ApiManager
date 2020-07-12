@@ -401,5 +401,13 @@ class DBUtil:
         """
         return self.api_history_table.find_one({'apiId': api_id})
 
+    def delete_api_history(self, api_id: str):
+        """
+        删除api历史数据
+
+        :param api_id: api的id
+        :return:
+        """
+        self.api_history_table.delete_one({"apiId":api_id})
 
 db = DBUtil()
