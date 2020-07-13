@@ -2,9 +2,113 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>ApiManager 我的项目</title>
+		<link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css" />
+		<script src="../jquery-3.5.1.min.js"></script>
+		<script>
+			$(function () {
+				// 获取用户数据
+				$.ajax({
+					url: "http://api.inaction.fun/user/data",
+					type: "GET",
+					success: function(data,status,xhr){
+						var userData = xhr.responseJSON
+						console.log(userData)
+						console.log(userData["account"])
+						var projectData = userData["project"]
+						for(let i =0; i< projectData.length; ++i){
+							console.log(projectData[i]["name"])
+							console.log(projectData[i]["leaderName"])
+							var data = projectData[i]
+							var th1 = "<th>"+data["name"]+"</th>"
+							var th2 = "<td>"+data["leaderName"]+"</td>"
+							var th3 = "<td>"+"3"+"</td>"
+							var th4 = "<td>"+data["createTime"]+"</td>"
+							var th5 = "<td>"+"操作"+"</td>"
+							var tr = $("<tr></tr>").html(th1+th2+th3+th4+th5)
+							$("#project-table-body").append(tr)
+						}
+					}
+				})
+			})
+		</script>
 	</head>
-	<body>
-		<h1>这是主页，登陆后跳转</h1>
+	<body style="background-color: #F4F4F4;">
+		<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #666699;padding: 10px;">
+			<span style="color: white;padding-right: 10px;font-size: 24px;font-weight: bold">ApiManager</span>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">首页<span class="sr-only">(current)</span></a>
+					</li>
+					<!-- "我们"这一项还没写 -->
+					<li class="nav-item">
+						<a class="nav-link" href="#">我们</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="#">消息</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">用户名</a>
+					</li>
+				</ul>
+
+			</div>
+		</nav>
+		<!-- 可能需要加一些图标 -->
+		<!-- 项目条 -->
+		<div class="card" style="width: 100%;">
+		  <div class="card-body">
+		    <h5 class="card-title">Card title</h5>
+		    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+		    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+		    <a href="#" class="card-link">Card link</a>
+		    <a href="#" class="card-link">Another link</a>
+		  </div>
+		</div>
+		
+		<div style="margin: 50px;background-color: #FFFFFF;">
+			<!--项目列表-->
+		    <table class="table">
+		      <thead>
+		        <tr>
+		          <th scope="col">名称</th>
+					<th >组长</th>
+		          <th scope="col">成员人数</th>
+		          <th scope="col">创建时间</th>
+		          <th scope="col">操作</th>
+		        </tr>
+		      </thead>
+		      <tbody id="project-table-body">
+		        <tr>
+		          <th >项目1</th>
+		          <td>Mark</td>
+					<td>Mark</td>
+		          <td>Otto</td>
+		          <td>@mdo</td>
+		        </tr>
+		        <tr>
+		          <th scope="row">项目2</th>
+		          <td>Jacob</td>
+					<td>Mark</td>
+		          <td>Thornton</td>
+		          <td>@fat</td>
+		        </tr>
+
+		      </tbody>
+		    </table>
+		</div>	
+		    
+		    <!--底部-->
+		<div>
+			<div class="footer" style="padding-bottom:50px;">
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小学期 2020
+		        <a href="">ApiManager创作组</a>
+		    </div>
+		</div>
+	
+	
 	</body>
 </html>

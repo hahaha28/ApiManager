@@ -108,6 +108,7 @@ def get_user_data():
         project_data.append({
             "id": str(i['_id']),
             "name": i['name'],
+            "createTime": i['createTime'],
             "leaderAccount": user_data['account'],
             "leaderName": user_data['name'],
             "members": members
@@ -125,6 +126,7 @@ def get_user_data():
         project_data.append({
             "id": str(i['_id']),
             "name": i['name'],
+            "createTime": i['createTime'],
             "leaderAccount": leader_data['account'],
             "leaderName": leader_data['name'],
             "members": members
