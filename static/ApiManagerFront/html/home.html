@@ -17,12 +17,13 @@
 						console.log(userData["account"])
 						var projectData = userData["project"]
 						for(let i =0; i< projectData.length; ++i){
+							// 将数据添加到表格
 							console.log(projectData[i]["name"])
 							console.log(projectData[i]["leaderName"])
 							var data = projectData[i]
 							var th1 = "<th>"+data["name"]+"</th>"
 							var th2 = "<td>"+data["leaderName"]+"</td>"
-							var th3 = "<td>"+"3"+"</td>"
+							var th3 = "<td>"+(data["members"].length+1)+"</td>"
 							var th4 = "<td>"+data["createTime"]+"</td>"
 							var th5 = "<td>"+"操作"+"</td>"
 							var tr = $("<tr></tr>").html(th1+th2+th3+th4+th5)
@@ -30,6 +31,10 @@
 						}
 					}
 				})
+				var date = new Date(1594643300541);
+				console.log(date.getFullYear())
+				console.log(date.getMonth())
+				console.log(date.getDate())
 			})
 		</script>
 	</head>
@@ -82,20 +87,6 @@
 		        </tr>
 		      </thead>
 		      <tbody id="project-table-body">
-		        <tr>
-		          <th >项目1</th>
-		          <td>Mark</td>
-					<td>Mark</td>
-		          <td>Otto</td>
-		          <td>@mdo</td>
-		        </tr>
-		        <tr>
-		          <th scope="row">项目2</th>
-		          <td>Jacob</td>
-					<td>Mark</td>
-		          <td>Thornton</td>
-		          <td>@fat</td>
-		        </tr>
 
 		      </tbody>
 		    </table>

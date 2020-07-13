@@ -82,7 +82,7 @@ class DBUtil:
         """
         return self.project_table.insert_one({
             "name": name,
-            "createTime": time.time(),
+            "createTime": get_time(),
             "creator": creator,
             "members": members,
             "apis": []
@@ -302,7 +302,7 @@ class DBUtil:
         :return: 返回ObjectId
         """
         api_data['createUser'] = create_user_id
-        api_data['createTime'] = time.time()
+        api_data['createTime'] = get_time()
         api_data['updateTime'] = api_data['createTime']
         api_data['updateUser'] = create_user_id
         api_data['updateInfo'] = None
@@ -319,7 +319,7 @@ class DBUtil:
         :param update_info: 更新说明
         :return:
         """
-        api_data['updateTime'] = time.time()
+        api_data['updateTime'] = get_time()
         api_data['updateUser'] = user_id
         api_data['updateInfo'] = update_info
         self.api_table.update_one(
@@ -408,6 +408,16 @@ class DBUtil:
         :param api_id: api的id
         :return:
         """
-        self.api_history_table.delete_one({"apiId":api_id})
+        self.api_history_table.delete_one({"apiId": api_id})
+
+
+def get_time() -> int:
+    """
+    获取13位时间戳
+
+    :return:
+    """
+    return int(round(time.time() * 1000))
+
 
 db = DBUtil()
