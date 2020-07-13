@@ -2,9 +2,89 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title></title>
+		<title>ApiManager 我的项目</title>
+		<link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css" />
+		<script src="../jquery-3.5.1.min.js"></script>
+		<script src="../bootstrap-4.5.0-dist/js/bootstrap.min.js"></script>
 	</head>
-	<body>
-		<h1>这是主页，登陆后跳转</h1>
+	<body style="background-color: #F4F4F4;">
+		<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #666699;padding: 10px;">
+			<span style="color: white;padding-right: 10px;font-size: 24px;font-weight: bold">ApiManager</span>
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active">
+						<a class="nav-link" href="#">首页<span class="sr-only">(current)</span></a>
+					</li>
+					<!-- "我们"这一项还没写 -->
+					<li class="nav-item">
+						<a class="nav-link" href="#">我们</a>
+					</li>
+				</ul>
+				<ul class="navbar-nav">
+					<li class="nav-item">
+						<a class="nav-link" href="#">消息</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="#">用户名</a>
+					</li>
+				</ul>
+
+			</div>
+		</nav>
+		<!-- 可能需要加一些图标 -->
+		<!-- 项目条 -->
+		<div class="card" style="width: 100%;">
+		  <div class="card-body">
+		    <h5 class="card-title">Card title</h5>
+		    <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+		    <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+		    <a href="#" class="card-link">Card link</a>
+		    <a href="#" class="card-link">Another link</a>
+		  </div>
+		</div>
+		
+		<div style="margin: 50px;background-color: #FFFFFF;">
+			<!--项目列表-->
+		    <table class="table">
+		      <thead>
+		        <tr>
+		          <th scope="col">名称</th>
+		          <th scope="col">版本号</th>
+		          <th scope="col">类型</th>
+		          <th scope="col">最后更新时间</th>
+		        </tr>
+		      </thead>
+		      <tbody>
+		        <tr>
+		          <th scope="row">项目1</th>
+		          <td>Mark</td>
+		          <td>Otto</td>
+		          <td>@mdo</td>
+		        </tr>
+		        <tr>
+		          <th scope="row">项目2</th>
+		          <td>Jacob</td>
+		          <td>Thornton</td>
+		          <td>@fat</td>
+		        </tr>
+		        <tr>
+		          <th scope="row">项目3</th>
+		          <td>Larry</td>
+		          <td>the Bird</td>
+		          <td>@twitter</td>
+		        </tr>
+		      </tbody>
+		    </table>
+		</div>	
+		    
+		    <!--底部-->
+		<div>
+			<div class="footer" style="padding-bottom:50px;">
+		        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小学期 2020
+		        <a href="">ApiManager创作组</a>
+		    </div>
+		</div>
+	
+	
 	</body>
 </html>
