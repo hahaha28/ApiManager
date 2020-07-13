@@ -16,6 +16,7 @@ def new_project():
     # 首先检查成员账号是否存在
     members = []
     not_found_members = []
+    print(len(request_data['members']))
     for member in request_data['members']:
         user_data = db.find_user(member['account'])
         if user_data is None:
@@ -39,6 +40,22 @@ def new_project():
     return jsonify({
         "projectId": project_id
     })
+
+
+@project_bp.route('/find/project', methods=['GET'])
+def find_project():
+    """
+    获取项目基本信息
+
+    :return:
+    """
+    project_id = request.args['id']
+    project_data = db.find_project(project_id)
+    if project_data is None:
+        return jsonify({'msg': 'no found'}), 404
+    del project_data['_id']
+    del project_data['apis']
+    return jsonify(project_data), 200
 
 
 @project_bp.route('/find/project/apis', methods=['GET'])

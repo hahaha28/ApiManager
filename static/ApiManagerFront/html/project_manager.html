@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <script src="../js/util.js"></script>
+    <script src="../jquery-3.5.1.min.js"></script>
+    <script>
+        const projectId = UrlParam.paramValues("id")[0]
+        $(function () {
+            // 获取该项目基本数据
+            $.ajax({
+                url: base_url + "/find/project?id=" + projectId,
+                type: "GET",
+                success: function (data, status, xhr) {
+                    // 成功时的回调（即状态码是2XX)
+                    // 打印返回的状态码
+                    console.log(xhr.status)
+                    // 打印返回的json数据
+                    console.log(xhr.responseJSON)
+                }
+            })
+        });
+    </script>
+</head>
+<body>
+
+</body>
+</html>

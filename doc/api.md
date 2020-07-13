@@ -106,6 +106,30 @@ json格式
 | 200    | {"projectId":"项目id"}                                       | 成功，并返回项目id                                           |
 | 404    | {<br/>"projectId":"项目id",<br/>"notFound":["不存在的成员账号1","账号2"]<br/>} | 某些成员账号不存在，此时创建项目成功，但是某些成员未加入项目 |
 
+## 获取项目基本信息
+
+**url：** /find/project?id=xxxx
+
+**方法：** get
+
+**url参数：** 项目的id
+
+**返回数据：**
+
+```json
+{
+    "name" : "String",	// 项目名
+    "createTime" : "Long", // 创建时间
+    "creator" : "UserId",	// 创建者id
+    "members" : [
+        {
+            "userId" : "String",	// 成员的ObjectId
+            "permission" : "Int" // 权限, 0只读，1可读可写
+        }
+     ]
+}
+```
+
 ## 获取项目API信息
 
 **url：** /find/project/apis?id=xxxx
