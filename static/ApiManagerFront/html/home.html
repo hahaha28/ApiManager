@@ -23,16 +23,26 @@
                     var projectData = userData["project"]
                     for (let i = 0; i < projectData.length; ++i) {
                         // 管理项目的a标签
+<<<<<<< HEAD
 
                         // 将数据添加到表格
                         console.log(projectData[i]["name"])
                         console.log(projectData[i]["leaderName"])
+=======
+                        const managerUrl = "project_manager.html?id="+projectData[i]["id"]
+                        // 将数据添加到表格
+
+>>>>>>> 9ee06004a83885d232f7dc9feb9d8d53e8363d9b
                         var data = projectData[i]
                         var th1 = "<th>" + data["name"] + "</th>"
                         var th2 = "<td>" + data["leaderName"] + "</td>"
                         var th3 = "<td>" + (data["members"].length + 1) + "</td>"
                         var th4 = "<td>" + getYMD(data["createTime"]) + "</td>"
+<<<<<<< HEAD
                         var th5 = "<td><a href='#'>查看API</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='#'>管理</a> </td>"
+=======
+                        var th5 = "<td><a href='"+managerUrl+"'>查看API</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='"+managerUrl+"'>管理</a> </td>"
+>>>>>>> 9ee06004a83885d232f7dc9feb9d8d53e8363d9b
                         var tr = $("<tr></tr>").html(th1 + th2 + th3 + th4 + th5)
                         $("#project-table-body").append(tr)
                     }
@@ -142,7 +152,11 @@
 
 <!--底部-->
 <div>
+<<<<<<< HEAD
     <div class="footer">
+=======
+    <div class="footer" style="padding-bottom:50px;">
+>>>>>>> 9ee06004a83885d232f7dc9feb9d8d53e8363d9b
         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;小学期 2020
         <a href="">ApiManager创作组</a>
     </div>
@@ -151,4 +165,8 @@
 <script src="../bootstrap-4.5.0-dist/js/bootstrap.js"></script>
 
 </body>
+<<<<<<< HEAD
 </html>
+=======
+</html>
+>>>>>>> 9ee06004a83885d232f7dc9feb9d8d53e8363d9b

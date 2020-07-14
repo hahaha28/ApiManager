@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目管理</title>
+    <link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../css/project_manager.css"/>
+    <script src="../jquery-3.5.1.min.js"></script>
+    <script src="../js/util.js"></script>
+    <script src="../js/project_manager.js"></script>
+
+</head>
+<body style="background-color: #F4F4F4;">
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #666699;padding: 10px;">
+    <span style="color: white;padding-right: 10px;font-size: 24px;font-weight: bold">ApiManager</span>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="#">首页<span class="sr-only">(current)</span></a>
+            </li>
+            <!-- "我们"这一项还没写 -->
+            <li class="nav-item">
+                <a class="nav-link" href="#">我们</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" href="#">消息</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" href="#">用户名</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>
+
+<!--修改权限的弹出框-->
+<div class="modal fade" id="updatePermissionModal" tabindex="-1" role="dialog" aria-labelledby="updatePermissionModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updatePermissionTitle" >修改权限</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="project-name" class="col-form-label">权限:</label>
+                        <select class="custom-select" id="updatePermissionSelect">
+                            <option value = "0" selected>只读</option>
+                            <option value="1">读写</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="updatePermission" type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--添加成员的弹出框-->
+<div class="modal fade" id="newMemberModal" tabindex="-1" role="dialog" aria-labelledby="newMemberModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">添加成员</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="project-name" class="col-form-label">成员账号:</label>
+                        <input type="text" class="form-control" id="memberAccount">
+                        <label for="project-name" class="col-form-label">权限:</label>
+                        <select class="custom-select" id="permissionSelect">
+                            <option value = "0" selected>只读</option>
+                            <option value="1">读写</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="newProjectMember" type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--项目名-->
+<div style="margin-left: 80px">
+    <h1 id="project-name">项目名</h1>
+    <hr class="my-4">
+</div>
+
+<!--内容-->
+<div class="content-container">
+
+    <!--    左侧的选择栏-->
+    <div class="list-group">
+        <a href="#" class="list-group-item list-group-item-action active">
+            团队管理
+        </a>
+        <a href="#" class="list-group-item list-group-item-action">
+            待扩展
+        </a>
+
+    </div>
+
+    <!-- 右侧的团队成员 -->
+    <div class="project-member">
+
+        <div class="member-container">
+            <h4>团队成员管理</h4>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newMemberModal"> 新增成员</button>
+        </div>
+        <hr>
+        <!-- 组长 -->
+        <div>
+            <h5 style="padding-bottom: 20px;font-weight: bold">组长</h5>
+            <div class="member-container">
+                <div>
+                    <div class="name" id="leaderName"></div>
+                    <div class="account" id="leaderAccount"></div>
+                </div>
+                <div>
+                    <span class="badge badge-pill badge-primary">
+                        管理员
+                    </span>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <!-- 组员 -->
+        <div style="margin-top: 30px" id="members">
+            <h5 style="padding-bottom: 20px;font-weight: bold">组员</h5>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="../bootstrap-4.5.0-dist/js/bootstrap.js"></script>
+</body>
+</html>
