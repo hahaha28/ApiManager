@@ -33,15 +33,32 @@ $(function () {
 
             // 点击修改权限
             $("#" + userAccount + "edit").click(function () {
+                if(userAccount !== leaderAccount){
+                    alert("你没有权限！")
+                    return
+                }
                 console.log(userAccount + "edit")
                 updatePermissionMemberAccount = userAccount
                 $("#updatePermissionModal").modal('show')
             })
             // 点击删除成员
             $("#" + userAccount + "delete").click(function () {
+                if(userAccount !== leaderAccount){
+                    alert("你没有权限！")
+                    return
+                }
                 deleteMember(projectId,userAccount)
             })
         }
+    })
+
+    // 点击添加成员按钮
+    $("#newMemberBtn").click(function () {
+        if(userAccount !== leaderAccount){
+            alert("你没有权限！")
+            return
+        }
+        $("#newMemberModal").modal('show')
     })
 
     // 添加项目成员
@@ -83,10 +100,7 @@ $(function () {
 
     // 点击修改权限的确定按钮
     $("#updatePermission").click(function () {
-        if(userAccount !== leaderAccount){
-            alert("你没有权限！")
-            return
-        }
+
         const permission = parseInt($("#updatePermissionSelect").val())
         updateMemberPermission(projectId,updatePermissionMemberAccount,permission)
     })

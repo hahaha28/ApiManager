@@ -22,7 +22,7 @@
                     console.log(userData)
                     console.log(userData["account"])
                     var account = userData["account"]
-                    $.cookie("userAccount","account")
+                    $.cookie("userAccount",account)
                     var projectData = userData["project"]
                     for (let i = 0; i < projectData.length; ++i) {
                         // 管理项目的a标签
