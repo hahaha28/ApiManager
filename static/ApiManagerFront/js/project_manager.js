@@ -3,7 +3,7 @@ const projectId = UrlParam.paramValues("id")[0]
 $(function () {
 
     const userAccount = $.cookie("userAccount")
-    console.log(userAccount)
+    console.log('userAccount='+userAccount)
     let leaderAccount
 
     const url = "/find/project?id=" + projectId
@@ -21,33 +21,34 @@ $(function () {
         for (let i = 0; i < data["members"].length; ++i) {
             const memberData = data["members"][i];
             const userName = memberData["userName"];
-            const userAccount = memberData["userAccount"];
+            const memberUserAccount = memberData["userAccount"];
             let permission;
             if (memberData["permission"] === 0) {
                 permission = "只读权限"
             } else {
                 permission = "读写权限"
             }
-            const html = getMemberHtml(userName, userAccount, permission);
+            const html = getMemberHtml(userName, memberUserAccount, permission);
             $("#members").append(html)
 
             // 点击修改权限
-            $("#" + userAccount + "edit").click(function () {
+            $("#" + memberUserAccount + "edit").click(function () {
                 if(userAccount !== leaderAccount){
+
                     alert("你没有权限！")
                     return
                 }
-                console.log(userAccount + "edit")
-                updatePermissionMemberAccount = userAccount
+                console.log(memberUserAccount + "edit")
+                updatePermissionMemberAccount = memberUserAccount
                 $("#updatePermissionModal").modal('show')
             })
             // 点击删除成员
-            $("#" + userAccount + "delete").click(function () {
+            $("#" + memberUserAccount + "delete").click(function () {
                 if(userAccount !== leaderAccount){
                     alert("你没有权限！")
                     return
                 }
-                deleteMember(projectId,userAccount)
+                deleteMember(projectId,memberUserAccount)
             })
         }
     })
