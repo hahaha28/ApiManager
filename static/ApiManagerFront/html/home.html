@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../bootstrap-4.5.0-dist/css/bootstrap.min.css"/>
 
     <script src="../jquery-3.5.1.min.js"></script>
+    <script src="../jquery.cookie.js"></script>
     <script src="../js/util.js"></script>
     <script>
         $(function () {
@@ -20,6 +21,8 @@
                     var userData = xhr.responseJSON
                     console.log(userData)
                     console.log(userData["account"])
+                    var account = userData["account"]
+                    $.cookie("userAccount","account")
                     var projectData = userData["project"]
                     for (let i = 0; i < projectData.length; ++i) {
                         // 管理项目的a标签
@@ -37,7 +40,7 @@
 
                         var tr = $("<tr></tr>").html(th1 + th2 + th3 + th4 + th5)
                         $("#project-table-body").append(tr)
-                        var test
+
                     }
                 }
             })

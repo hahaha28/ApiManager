@@ -1,6 +1,11 @@
 const projectId = UrlParam.paramValues("id")[0]
 
 $(function () {
+
+    const userAccount = $.cookie("userAccount")
+    console.log(userAccount)
+    let leaderAccount
+
     const url = "/find/project?id=" + projectId
 
     var updatePermissionMemberAccount
@@ -9,7 +14,7 @@ $(function () {
     httpGET(url, function (data) {
         const projectName = data["name"];
         const leaderName = data["creatorName"];
-        const leaderAccount = data["creatorAccount"];
+        leaderAccount = data["creatorAccount"];
         $("#project-name").text(projectName)
         $("#leaderName").text(leaderName)
         $("#leaderAccount").text(leaderAccount)
@@ -78,6 +83,10 @@ $(function () {
 
     // 点击修改权限的确定按钮
     $("#updatePermission").click(function () {
+        if(userAccount !== leaderAccount){
+            alert("你没有权限！")
+            return
+        }
         const permission = parseInt($("#updatePermissionSelect").val())
         updateMemberPermission(projectId,updatePermissionMemberAccount,permission)
     })
@@ -103,6 +112,8 @@ $(function () {
                 alert(code+","+responseData['msg'])
             })
     }
+
+
 
 });
 
