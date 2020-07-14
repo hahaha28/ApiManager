@@ -117,10 +117,10 @@ def new_project_member():
     # 检查账号是否已在项目成员中
     user_id = str(user_data['_id'])
     if user_id == project_data['creator']:
-        return jsonify({"msg": "不能重复加入"})
+        return jsonify({"msg": "不能重复加入"}),409
     for member in project_data['members']:
         if user_id == member['userId']:
-            return jsonify({"msg": "不能重复加入"})
+            return jsonify({"msg": "不能重复加入"}),409
     # 添加数据
     db.add_project_member(
         request_data['projectId'],

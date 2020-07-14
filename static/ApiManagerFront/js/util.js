@@ -22,6 +22,21 @@ function httpGET(url,success,error) {
     })
 }
 
+function httpPost(url,data,success,error){
+    $.ajax({
+        url: base_url+url,
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: 'application/json',
+        success: function (data,status,xhr) {
+            success(xhr.responseJSON)
+        },
+        error: function (xhr, error, exception){
+            error(xhr.status,xhr.responseJSON)
+        }
+    })
+}
+
 
 /**
  * 把时间戳转换为 x年x月x日 的字符串

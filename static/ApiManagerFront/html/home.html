@@ -31,7 +31,7 @@
                         var th2 = "<td>" + data["leaderName"] + "</td>"
                         var th3 = "<td>" + (data["members"].length + 1) + "</td>"
                         var th4 = "<td>" + getYMD(data["createTime"]) + "</td>"
-                        var th5 = "<td><a href='"+managerUrl+"'>查看API</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='#'>管理</a> </td>"
+                        var th5 = "<td><a href='"+managerUrl+"'>查看API</a>&nbsp;&nbsp;|&nbsp;&nbsp;<a href='"+managerUrl+"'>管理</a> </td>"
                         var tr = $("<tr></tr>").html(th1 + th2 + th3 + th4 + th5)
                         $("#project-table-body").append(tr)
                     }
