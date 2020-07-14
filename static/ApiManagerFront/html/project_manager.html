@@ -35,6 +35,36 @@
     </div>
 </nav>
 
+<!--修改权限的弹出框-->
+<div class="modal fade" id="updatePermissionModal" tabindex="-1" role="dialog" aria-labelledby="updatePermissionModal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="updatePermissionTitle" >修改权限</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="project-name" class="col-form-label">权限:</label>
+                        <select class="custom-select" id="updatePermissionSelect">
+                            <option value = "0" selected>只读</option>
+                            <option value="1">读写</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button id="updatePermission" type="button" class="btn btn-primary">OK</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <!--添加成员的弹出框-->
 <div class="modal fade" id="newMemberModal" tabindex="-1" role="dialog" aria-labelledby="newMemberModal" aria-hidden="true">
     <div class="modal-dialog">
@@ -66,12 +96,13 @@
     </div>
 </div>
 
-
+<!--项目名-->
 <div style="margin-left: 80px">
     <h1 id="project-name">项目名</h1>
     <hr class="my-4">
 </div>
 
+<!--内容-->
 <div class="content-container">
 
     <!--    左侧的选择栏-->
@@ -95,7 +126,7 @@
         <hr>
         <!-- 组长 -->
         <div>
-            <h5 style="padding-bottom: 20px">组长</h5>
+            <h5 style="padding-bottom: 20px;font-weight: bold">组长</h5>
             <div class="member-container">
                 <div>
                     <div class="name" id="leaderName"></div>
@@ -108,15 +139,17 @@
                 </div>
             </div>
         </div>
+        <hr>
         <!-- 组员 -->
         <div style="margin-top: 30px" id="members">
-            <h5 style="padding-bottom: 20px">组员</h5>
+            <h5 style="padding-bottom: 20px;font-weight: bold">组员</h5>
 
         </div>
 
     </div>
 
 </div>
+
 
 <script src="../bootstrap-4.5.0-dist/js/bootstrap.js"></script>
 </body>

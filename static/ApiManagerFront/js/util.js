@@ -9,7 +9,7 @@ const base_url = "http://api.inaction.fun"
  * @param url url不包括域名，以 / 开头
  * @param success 成功的返回
  */
-function httpGET(url,success,error) {
+function httpGET(url,success,err) {
     $.ajax({
         url: base_url+url,
         type: "GET",
@@ -17,12 +17,12 @@ function httpGET(url,success,error) {
             success(xhr.responseJSON)
         },
         error: function (xhr, error, exception){
-            error(xhr.status,xhr.responseJSON)
+            err(xhr.status,xhr.responseJSON)
         }
     })
 }
 
-function httpPost(url,data,success,error){
+function httpPost(url,data,success,err){
     $.ajax({
         url: base_url+url,
         type: "POST",
@@ -32,7 +32,8 @@ function httpPost(url,data,success,error){
             success(xhr.responseJSON)
         },
         error: function (xhr, error, exception){
-            error(xhr.status,xhr.responseJSON)
+            console.log('test')
+            err(xhr.status,xhr.responseJSON)
         }
     })
 }
