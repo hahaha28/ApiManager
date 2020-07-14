@@ -120,10 +120,13 @@ json格式
 {
     "name" : "String",	// 项目名
     "createTime" : "Long", // 创建时间
-    "creator" : "UserId",	// 创建者id
+    "creatorAccount" : "String",	// 创建者账号
+    "creatorName": "String", // 创建者的名称
     "members" : [
         {
             "userId" : "String",	// 成员的ObjectId
+            "userAccount" : "String", // 成员的账号
+            "userName" : "String", // 成员的名称
             "permission" : "Int" // 权限, 0只读，1可读可写
         }
      ]

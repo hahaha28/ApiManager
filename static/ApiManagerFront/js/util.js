@@ -1,6 +1,27 @@
 
+
 const base_url = "http://api.inaction.fun"
 // const base_url = "http://127.0.0.1:9999"
+
+
+/**
+ * 发送get请求
+ * @param url url不包括域名，以 / 开头
+ * @param success 成功的返回
+ */
+function httpGET(url,success,error) {
+    $.ajax({
+        url: base_url+url,
+        type: "GET",
+        success: function (data,status,xhr) {
+            success(xhr.responseJSON)
+        },
+        error: function (xhr, error, exception){
+            error(xhr.status,xhr.responseJSON)
+        }
+    })
+}
+
 
 /**
  * 把时间戳转换为 x年x月x日 的字符串
@@ -15,6 +36,10 @@ function getYMD(timestamp) {
     return year+"年"+month+"月"+day+"日"
 }
 
+/**
+ * 获取url参数
+ * @type {{paramValues: UrlParam.paramValues, param: UrlParam.param, hasParam: (function(*): boolean), paramMap: (function(): {})}}
+ */
 UrlParam = function() { // url参数
     var data, index;
     (function init() {

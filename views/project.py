@@ -55,6 +55,19 @@ def find_project():
         return jsonify({'msg': 'no found'}), 404
     del project_data['_id']
     del project_data['apis']
+    creator_id = project_data['creator']
+    creator_data = db.find_user_by_id(creator_id)
+    project_data['creatorAccount'] = creator_data['account']
+    project_data['creatorName'] = creator_data['name']
+
+    i = 0
+    for member in project_data['members']:
+        member_id = member['userId']
+        member_data = db.find_user_by_id(member_id)
+        project_data['members'][i]['userAccount'] = member_data['account']
+        project_data['members'][i]['userName'] = member_data['name']
+        i = i+1
+
     return jsonify(project_data), 200
 
 

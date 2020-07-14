@@ -9,16 +9,18 @@
         const projectId = UrlParam.paramValues("id")[0]
         $(function () {
             // 获取该项目基本数据
-            $.ajax({
-                url: base_url + "/find/project?id=" + projectId,
-                type: "GET",
-                success: function (data, status, xhr) {
-                    // 成功时的回调（即状态码是2XX)
-                    // 打印返回的状态码
-                    console.log(xhr.status)
-                    // 打印返回的json数据
-                    console.log(xhr.responseJSON)
-                }
+            // $.ajax({
+            //     url: base_url + "/find/project?id=" + projectId,
+            //     type: "GET",
+            //     success: function (data, status, xhr) {
+            //
+            //         projectData = xhr.responseJSON;
+            //
+            //     }
+            // })
+            const url = "/find/project?id="+projectId
+            httpGET(url,function (jsonData) {
+                console.log(jsonData)
             })
         });
     </script>
