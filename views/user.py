@@ -1,4 +1,4 @@
-from flask import Blueprint, request, jsonify, session
+from flask import Blueprint, request, jsonify, session,make_response
 
 from dbutil import db
 
@@ -64,9 +64,10 @@ def login():
     # 登录成功，在session中记录
     session['is_login'] = True
     session['user_id'] = str(user['_id'])
-    return jsonify({
-        'msg': 'ok'
-    }), 200
+    response = make_response(jsonify({'msg':'ok'}))
+    response.set_cookie('SameSite','None')
+    response.set_cookie('Secure')
+    return response
 
 
 @user_bp.route('/logout', methods=['GET'])

@@ -1,8 +1,19 @@
-.cell{
-    border: 0.1px solid #000000;
-    padding: 10px;
+.out-border{
+    border:0.1px solid #dee2e6;
     width: 400px;
+    margin-top: -0.1px;
 }
-.form-control{
-    
+.line-container{
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 1px solid #dee2e6;
+}
+.input-container{
+    padding: 0.75em;
+}
+.flex-table-head{
+    border: 0.1px solid #dee2e6;
+    border-bottom: 1.1px solid #dee2e6;
+    padding: 0.75em;
+    font-weight: bold;
 }

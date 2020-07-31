@@ -1,12 +1,17 @@
 import pymongo
 import time
+import json
 
 from bson import ObjectId
 
 
 class DBUtil:
     def __init__(self):
-        self.client = pymongo.MongoClient(host='123.57.133.29', port=27017)
+        with open('dbconfig.json', "r") as f:
+            config = json.loads(f.read())
+            user_name = config['userName']
+            password = config['password']
+        self.client = pymongo.MongoClient(f'mongodb://{user_name}:{password}@123.57.133.29:27017/?authSource=admin')
         self.db = self.client.api_manager
         self.user_table = self.db.user
         self.project_table = self.db.project
@@ -239,6 +244,28 @@ class DBUtil:
                 }
 
             )
+
+    def add_project_api_group_name(self, project_id: str, group_name: str):
+        """
+        新建项目的api分组名
+        :param project_id: 项目id
+        :param group_name: 分组名
+        :return:
+        """
+        self.project_table.update_one(
+            {
+                "_id": ObjectId(project_id)
+            },
+            {
+                "$addToSet": {
+                    'apis': {
+                        'groupName': group_name,
+                        'apiIds': [
+                        ]
+                    }
+                }
+            }
+        )
 
     def delete_project_member(self, project_id: str, member_id: str):
         """

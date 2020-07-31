@@ -66,7 +66,7 @@ def find_project():
         member_data = db.find_user_by_id(member_id)
         project_data['members'][i]['userAccount'] = member_data['account']
         project_data['members'][i]['userName'] = member_data['name']
-        i = i+1
+        i = i + 1
 
     return jsonify(project_data), 200
 
@@ -117,10 +117,10 @@ def new_project_member():
     # 检查账号是否已在项目成员中
     user_id = str(user_data['_id'])
     if user_id == project_data['creator']:
-        return jsonify({"msg": "不能重复加入"}),409
+        return jsonify({"msg": "不能重复加入"}), 409
     for member in project_data['members']:
         if user_id == member['userId']:
-            return jsonify({"msg": "不能重复加入"}),409
+            return jsonify({"msg": "不能重复加入"}), 409
     # 添加数据
     db.add_project_member(
         request_data['projectId'],
@@ -190,4 +190,25 @@ def delete_member():
         return jsonify({'msg': '用户账号或项目不存在，或用户不是项目成员'}), 404
     member_id = str(member_data['_id'])
     db.delete_project_member(project_id, member_id)
+    return jsonify({'msg': 'ok'}), 200
+
+
+@project_bp.route('/new/project/api_group', methods=['POST'])
+def new_project_api_group():
+    """
+    新建api分组
+    :return:
+    """
+    project_id = request.json['projectId']
+    group_name = request.json['groupName']
+    # 先检查项目是否存在
+    project_data = db.find_project(project_id)
+    if project_data is None:
+        return jsonify({'msg': 'not found'}), 404
+    # 再检查该分组名是否已存在
+    for api in project_data['apis']:
+        if api['groupName'] == group_name:
+            return jsonify({'msg': '该分组名已存在'}), 409
+    # 一切正常，新建分组名
+    db.add_project_api_group_name(project_id, group_name)
     return jsonify({'msg': 'ok'}), 200
